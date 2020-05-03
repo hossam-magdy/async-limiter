@@ -5,6 +5,7 @@ type OnDoneCallback = (...args: any) => any;
 declare class Queue {
     constructor(options?: {concurrency?: number});
     readonly length: number;
+    add<T>(asyncJob: () => Promise<T>): Promise<T>;
     push(...items: AsyncJobCallback[]): number;
     splice(start: number, deleteCount?: number): AsyncJobCallback[];
     splice(start: number, deleteCount: number, ...items: AsyncJobCallback[]): AsyncJobCallback[];

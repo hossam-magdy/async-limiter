@@ -37,6 +37,25 @@ class Queue {
   }
 
   /**
+   * @template T
+   * @param {() => Promise<T>} asyncJob
+   * @returns {Promise<T>}
+   */
+  add(asyncJob) {
+    return new Promise((resolve, reject) => {
+      // /** @param {() => void} cb */
+      // @ts-ignore
+      this.push((cb) => {
+        asyncJob()
+          .then((result) => resolve(result))
+          .catch((result) => reject(result))
+          .then(() => { cb(); })
+        ;
+      });
+    });
+  }
+
+  /**
    * Called upon completion of a job. Calls _run() again
    * to pluck the next job off the queue, if it exists.
    * @private
